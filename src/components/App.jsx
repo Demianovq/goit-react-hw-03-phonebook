@@ -10,6 +10,23 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      const serializedState = JSON.stringify(this.state.contacts);
+      localStorage.setItem('contacts', serializedState);
+    }
+  }
+
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    if (savedContacts) {
+      const parsedContacts = JSON.parse(savedContacts);
+      this.setState(prevState => ({
+        contacts: parsedContacts,
+      }));
+    }
+  }
+
   handleSubmit = (values, { resetForm }) => {
     let newContact = values;
 
